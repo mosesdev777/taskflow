@@ -1,0 +1,47 @@
+{% extends "taskflow/base.html" %}
+
+{% block title %}{% if object %}Editar Tarea{% else %}Crear Tarea{% endif %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+            {% if object %}
+            Editar Tarea: <span class="text-cyan-500">{{ object.title }}</span>
+            {% else %}
+            Crear una Nueva Tarea
+            {% endif %}
+        </h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in form %}
+            <div class="mb-4">
+                <label for="{{ field.id_for_label }}"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-red-500 text-sm mt-1">
+                    {{ field.errors|striptags }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="mt-6 flex items-center justify-end space-x-4">
+                <a href="{% url 'taskflow:list' %}"
+                    class="px-4 py-2 font-semibold text-gray-700 dark:text-gray-200 bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500">
+                    Cancelar
+                </a>
+                <button type="submit"
+                    class="px-4 py-2 font-semibold text-white bg-cyan-400 rounded-md hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-opacity-75">
+                    {% if object %}Actualizar Tarea{% else %}Guardar Tarea{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
